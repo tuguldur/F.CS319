@@ -23,6 +23,7 @@ passport.use(
           { code: new RegExp(`^${email.trim()}$`, "i") },
         ])
         .then((user) => {
+          console.log(user);
           if (!user) {
             return done(null, false, [
               {
