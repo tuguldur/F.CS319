@@ -1,0 +1,45 @@
+.main-menu {
+  min-height: calc(100vh - 96px) !important;
+  @media (max-width: 768px) {
+    display: none !important;
+  }
+  .main-menu-inner {
+    height: 100%;
+    max-height: 100vh;
+    overflow: hidden;
+  }
+}
+.main-menu > div,
+.main-menu > div > div {
+  height: 100%;
+  min-height: 100vh;
+}
+.aside-container {
+  min-height: 100%;
+}
+.aside-container.ant-menu-inline.ant-menu-inline
+  > .ant-menu-item-group
+  > .ant-menu-item-group-list
+  > .ant-menu-item,
+.aside-container.ant-menu-inline > .ant-menu-item,
+.aside-container.ant-menu-inline
+  > .ant-menu-item-group
+  > .ant-menu-item-group-list
+  > .ant-menu-item,
+.aside-container.ant-menu-inline
+  > .ant-menu-item-group
+  > .ant-menu-item-group-title,
+.aside-container.ant-menu-inline > .ant-menu-submenu > .ant-menu-submenu-title {
+  padding-left: 40px !important;
+}
+.ant-menu-item-group-title {
+  &::after {
+    position: relative;
+    top: 12px;
+    display: block;
+    width: calc(100% - 20px);
+    height: 1px;
+    background: #f0f0f0;
+    content: "";
+  }
+}
