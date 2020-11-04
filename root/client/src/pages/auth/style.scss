@@ -1,0 +1,54 @@
+.auth {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 10px;
+  padding-top: 56px;
+  .form-texts {
+    h1 {
+      font-size: 24px;
+      font-weight: 600;
+      line-height: 27px;
+      margin: 1.5rem 0;
+    }
+    p {
+      margin-top: -1rem;
+      color: #424242;
+      font-size: 16px;
+      font-weight: 400;
+      margin-bottom: 1.5rem;
+    }
+  }
+  form {
+    box-shadow: 0 13px 30px 5px hsla(0, 0%, 4%, 0.03),
+      0 0 0 1px hsla(0, 0%, 4%, 0.05);
+    color: #424242;
+    display: block;
+    background-color: #fff;
+    border-radius: 4px;
+    padding: 20px;
+    padding-bottom: 20px;
+    .ant-input {
+      box-shadow: 0 0 1px 0 hsla(0, 0%, 4%, 0.1);
+      border-radius: 4px;
+    }
+    .ant-form-item-required {
+      color: #363636;
+      display: block;
+      font-size: 16px;
+      font-weight: 700;
+      &::before {
+        content: "" !important;
+      }
+    }
+    .small {
+      color: #b5b5b5;
+      font-size: 12px;
+      margin-top: -5px;
+    }
+  }
+  .ant-form-item {
+    &:not(.ant-form-item-has-error) {
+      margin-bottom: 12px;
+    }
+  }
+}
