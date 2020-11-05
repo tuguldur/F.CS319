@@ -31,19 +31,28 @@ const App = () => {
       <User.Provider value={value}>
         <Header />
         <div className="app">
-          <Row>
-            <MainMenu />
-            <Col xs={24} sm={24} md={18} xl={19} xxl={20}>
-              <div className="app-container">
-                <Switch>
-                  <Route exact path="/" component={Auth} />
-                  <PrivateRoute path="/dashboard" component={Dashboard} />
-                  <PrivateRoute path="/settings" component={Settings} />
-                  <Redirect to="/" />
-                </Switch>
-              </div>
-            </Col>
-          </Row>
+          {user ? (
+            <Row>
+              <MainMenu />
+              <Col xs={24} sm={24} md={18} xl={19} xxl={20}>
+                <div className="app-container">
+                  <Switch>
+                    <PrivateRoute
+                      exact
+                      path="/dashboard"
+                      component={Dashboard}
+                    />
+                    <PrivateRoute exact path="/settings" component={Settings} />
+                  </Switch>
+                </div>
+              </Col>
+            </Row>
+          ) : (
+            <Switch>
+              <Route exact path="/auth" component={Auth} />
+              <Redirect to="/dashboard" />
+            </Switch>
+          )}
         </div>
       </User.Provider>
     </Router>

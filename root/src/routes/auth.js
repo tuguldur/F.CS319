@@ -2,14 +2,14 @@ const express = require("express");
 const passport = require("passport");
 const router = express.Router();
 const auth = require("../controllers/auth");
-const validator = require("../middleware/validator");
 // middleware
 const token = require("../middleware/token");
+const validator = require("../middleware/validator");
 /**
  * /api/auth:
  */
 router.get("/", token, auth.index);
-router.post("/login", (req, res, next) => {
+router.post("/login", validator.auth, (req, res, next) => {
   passport.authenticate("local", (err, root, error) => {
     if (!root || err) {
       return res.json({

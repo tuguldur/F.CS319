@@ -1,7 +1,15 @@
 .settings {
-  max-width: 680px;
-  margin: 0 auto;
-  margin-top: 50px;
-  display: flex;
-  justify-content: center;
+  .admin-type {
+    .ant-badge-count {
+      background-color: #fff;
+      color: #000;
+      box-shadow: 0 0 0 1px #d9d9d9 inset;
+    }
+  }
+  .add-new-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 25px;
+  }
 }

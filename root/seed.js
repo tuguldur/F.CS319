@@ -26,6 +26,7 @@ var data = [
       {
         email: "root@stda.edu.mn",
         name: "Root",
+        type: "root",
         password: "password",
       },
     ],

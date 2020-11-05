@@ -12,6 +12,11 @@ const rootSchema = new Schema({
     required: true,
     unique: true,
   },
+  type: {
+    type: String,
+    required: true,
+    default: "staff",
+  },
   password: {
     type: String,
     required: true,

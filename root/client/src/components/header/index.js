@@ -38,7 +38,7 @@ const Header = () => {
         <Col xs={24} sm={24} md={6} lg={6} xl={5} xxl={4}>
           <h1 className="brand">
             <Link to="/" className="logo">
-              Brand
+              Logo
             </Link>
           </h1>
         </Col>
@@ -46,13 +46,9 @@ const Header = () => {
           <div className="header-menu-row">
             {user ? (
               <Dropdown overlay={menu} trigger={["click"]}>
-                <a
-                  className="ant-dropdown-link"
-                  onClick={(e) => e.preventDefault()}
-                  href="/"
-                >
+                <Button>
                   {user.name} <DownOutlined />
-                </a>
+                </Button>
               </Dropdown>
             ) : (
               <Link to="/auth">

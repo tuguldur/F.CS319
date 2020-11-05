@@ -1,14 +1,16 @@
 const { check } = require("express-validator");
 
-exports.register = [
+exports.new_staff = [
   check("email").isEmail(),
-  check("code").isLength({ min: 10, max: 10 }),
   check("name")
     .isLength({
       min: 2,
       max: 72,
     })
     .withMessage("Must be between 2 and 72 in length"),
+  check("type")
+    .isIn(["admin", "student", "teacher", "diploma", "department"])
+    .withMessage("Invalid role attached"),
   check("password")
     .isLength({
       min: 6,
@@ -17,7 +19,7 @@ exports.register = [
     .withMessage("Must be between 6 and 128 in length"),
 ];
 exports.auth = [
-  check("code"),
+  check("email").isEmail(),
   check("password")
     .isLength({
       min: 6,

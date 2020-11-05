@@ -18,7 +18,7 @@ const Auth = () => {
           : setError({ failed: response.data.msg });
       }
       if (response.data.status) {
-        window.location.href = "/";
+        window.location.href = "/dashboard";
       }
     });
   };
