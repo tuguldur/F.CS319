@@ -12,6 +12,8 @@ import {
   Select,
   message,
   notification,
+  Space,
+  Popconfirm,
 } from "antd";
 import axios from "axios";
 import "./style.scss";
@@ -25,17 +27,26 @@ const Settings = () => {
   const { Option } = Select;
   const { user } = useContext(User);
   const [admins, setAdmins] = useState(null);
+  const [admin, setAdmin] = useState(null);
   const [edit, showEdit] = useState(false);
   const [newstaff, showNewStaff] = useState(false);
   // form
   const [staff] = Form.useForm();
+  const [editform] = Form.useForm();
   const get_admin = () => {
     setAdmins(null);
-    axios.get("api/root").then((response) => setAdmins(response.data));
+    axios
+      .get("api/root")
+      .then((response) => setAdmins([{ ...user }].concat(response.data)));
   };
   useEffect(() => {
-    get_admin();
-  }, []);
+    if (user && user.type === "root") {
+      get_admin();
+    }
+  }, [user]);
+  useEffect(() => {
+    if (admin) editform.resetFields();
+  }, [admin]);
   const columns = [
     {
       title: "Нэр",
@@ -70,9 +81,36 @@ const Settings = () => {
       dataIndex: "_id",
       key: "_id",
       render: (text, record) => (
-        <Button size="small" onClick={() => showEdit(true)}>
-          Засах
-        </Button>
+        <Space>
+          <Button
+            size="small"
+            onClick={() => {
+              showEdit(true);
+              if (admin) {
+                setAdmin(null);
+              }
+              setAdmin(record);
+            }}
+          >
+            Засах
+          </Button>
+          {record._id !== user._id ? (
+            <Popconfirm
+              title={`${record.name}-ийн бүртгэлийг устгахдаа итгэлтэй байна уу?`}
+              onConfirm={() => {
+                axios.get("/api/root/delete/" + record._id);
+                message.success("Бүртгэлээс амжилттай хаслаа.");
+                get_admin();
+              }}
+              okText="Тийм"
+              cancelText="Үгүй"
+            >
+              <Button size="small" danger>
+                Устгах
+              </Button>
+            </Popconfirm>
+          ) : null}
+        </Space>
       ),
     },
   ];
@@ -105,14 +143,91 @@ const Settings = () => {
       <Modal
         title="Мэдээлэл засах"
         visible={edit}
-        onOk={() => alert("wait")}
+        onOk={() => editform.submit()}
         onCancel={() => showEdit(false)}
         okText="Хадгалах"
         cancelText="Цуцлах"
       >
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
+        {admin ? (
+          <Form
+            name="edit-form"
+            onFinish={(values) => {
+              axios.post("/api/root/update", { ...values }).then((response) => {
+                const { status, errors } = response.data;
+                if (status) {
+                  message.success("Мэдээлэл амжилттай солигдлоо.");
+                  get_admin();
+                  editform.resetFields();
+                } else {
+                  notification.error({
+                    message: "Алдаатай хүсэлт.",
+                    description: errors.map((err, index) => (
+                      <div key={index}>
+                        <span>
+                          - <b>{err.param}</b> {err.msg}
+                        </span>
+                        <br />
+                      </div>
+                    )),
+                  });
+                }
+              });
+            }}
+            initialValues={{ ...admin }}
+            form={editform}
+          >
+            <Form.Item
+              name="name"
+              rules={[
+                {
+                  required: true,
+                  message: "Ажилтны нэрийг оруулна уу.",
+                },
+              ]}
+            >
+              <Input placeholder="Нэр" autoComplete="off" />
+            </Form.Item>
+            <Form.Item
+              name="email"
+              rules={[
+                {
+                  required: true,
+                  message: "Ажилтны email хаягыг оруулна уу.",
+                },
+              ]}
+            >
+              <Input placeholder="Email" autoComplete="off" />
+            </Form.Item>
+            {admin._id === user._id ? (
+              <div className="change-password">
+                your changing your password for yourself
+              </div>
+            ) : (
+              <>
+                <Form.Item
+                  name="type"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Ажилтны төрөлийг сонгоно уу.",
+                    },
+                  ]}
+                >
+                  <Select placeholder="Ажилтны төрөл">
+                    <Option value="admin">Admin</Option>
+                    <Option value="student">Оюутны Менежер</Option>
+                    <Option value="diploma">Дипломын Менежер</Option>
+                    <Option value="department">Салбар сургуулын Менежер</Option>
+                  </Select>
+                </Form.Item>
+              </>
+            )}
+          </Form>
+        ) : (
+          <div className="spinner-container">
+            <Spin />
+          </div>
+        )}
       </Modal>
       {/* add new staff modal */}
       <Modal
@@ -130,6 +245,7 @@ const Settings = () => {
               const { status, errors } = response.data;
               if (status) {
                 message.success("Ажилтан амжилттай нэмэгдлээ.");
+                get_admin();
                 staff.resetFields();
               } else {
                 notification.error({
